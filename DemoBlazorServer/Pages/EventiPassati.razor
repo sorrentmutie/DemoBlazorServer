@@ -1,0 +1,44 @@
+﻿@page "/eventipassati"
+
+@* @inject IEnumerable<IEventi> servizioEventi
+ *@
+
+ @inject IEventi servizioEventi
+
+<ListaEventi Titolo="Lista Eventi Passati" Eventi="eventiPassati" OnEventoEliminato="EliminaEventoPassato" />
+
+
+@code {
+    // private List<Evento> eventiPassati = new() {
+    //  new Evento { Id = 1, Nome = "Evento 3", Data = DateTime.Now.AddDays(-11), Località = "Milano" },
+    //  new Evento { Id = 2, Nome = "Evento 4", Data = DateTime.Now.AddDays(-2), Località = "Torino" },
+    // };
+
+    //ServizioEventi servizioEventi = new ServizioEventi();
+    private List<Evento> eventiPassati = new();
+
+    protected override void OnInitialized()
+    {
+        eventiPassati = servizioEventi.EstraiEventiPassati();
+    }
+
+    // protected override void OnAfterRender(bool firstRender)
+    // {
+
+    // }
+
+    // protected override void OnParametersSet()
+    // {
+        
+    // }
+
+
+    private void EliminaEventoPassato(Evento eventoDaEliminare)
+    {
+        if (eventoDaEliminare.Id % 2 == 0)
+        {
+            eventiPassati.Remove(eventoDaEliminare);
+        }
+    }
+
+}
