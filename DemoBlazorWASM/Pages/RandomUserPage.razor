@@ -1,0 +1,23 @@
+﻿@page "/randomuser"
+@using DemoBlazorServer.Models.RandomUserAPI
+
+@inject IRandomUserData randomUserData
+
+<h3>Random User Page</h3>
+
+@if (data != null)
+{
+    <CardUtente ImageUrl="@data.results[0].picture.large" 
+                FullName=@(data.results[0].name.first + @data.results[0].name.last)> </CardUtente>
+}
+
+
+@code {
+
+    private RandomUserAPIResponse? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+       data = await randomUserData.GetRandomUser();
+    }
+}

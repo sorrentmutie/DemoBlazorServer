@@ -1,0 +1,10 @@
+﻿<div>
+    <h4>@FullName</h4>
+    <img src="@ImageUrl" alt="Random User" />
+</div>
+
+
+@code {
+    [Parameter] public string FullName { get; set; } = "";
+    [Parameter] public string ImageUrl { get; set; } = "";
+}
