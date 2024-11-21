@@ -21,4 +21,12 @@ public class MioInteropJavaScript
         await jSRuntime.InvokeVoidAsync("miaMoltiplicazione", a, b);
     }
 
+    public async Task SalutaDaJavaScript(string nome)
+    {
+       var myHello = new HelloHelper(nome);
+       var objRef = DotNetObjectReference.Create(myHello);
+       await jSRuntime.InvokeVoidAsync("sayHello", objRef);
+    }
+
+
 }

@@ -10,9 +10,13 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 <button class="btn btn-primary" @onclick="EseguiJavaScript">Esegui Codice JavaScript</button>
+<button class="btn btn-primary" @onclick="ApriModale">Apri Modale</button>
+
 
 @somma
 
+<hr/>
+<MyModal Id="@myId"></MyModal>
 
 
 
@@ -21,11 +25,17 @@
     private int currentCount = 0;
     private int somma = 0;
     private MioInteropJavaScript? mioInteropJavaScript;
+    private string myId = "myId";
 
     protected override async Task OnInitializedAsync()
     {
         mioInteropJavaScript = new(jsRuntime);
         await jsRuntime.InvokeVoidAsync("miaFunzioneSpeciale", 3,4);
+        await mioInteropJavaScript.SalutaDaJavaScript("Mario");
+    }
+
+    private async Task ApriModale() { 
+        await jsRuntime.InvokeVoidAsync("showModal", myId);
     }
 
 

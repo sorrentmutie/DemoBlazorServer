@@ -11,3 +11,24 @@ window.miaFunzioneSpeciale = (a, b) => {
     DotNet.invokeMethodAsync("DemoBlazorWASM", "CalcolaSommaSpeciale", a, b)
         .then(risultato => console.log(risultato));
 }
+
+window.sayHello = (dotNetObject) => {
+    console.log(dotNetObject);
+    dotNetObject.invokeMethodAsync("SayHello")
+        .then(saluto => console.log(saluto));        ;
+}
+
+
+let myModal; 
+
+window.showModal = (id) => {
+    myModal = new bootstrap.Modal(document.getElementById(id));
+    myModal.show();
+}
+
+
+window.hideModal = () => {
+    if (myModal) {
+        myModal.hide();
+    }
+}
