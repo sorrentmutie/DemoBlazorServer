@@ -1,4 +1,6 @@
 ﻿@page "/counter"
+@using DemoBlazorWASM.Interop
+@inject IJSRuntime jsRuntime
 
 <PageTitle>Counter</PageTitle>
 
@@ -7,12 +9,35 @@
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="EseguiJavaScript">Esegui Codice JavaScript</button>
+
+@somma
+
 
 @code {
     private int currentCount = 0;
+    private int somma = 0;
+    private MioInteropJavaScript? mioInteropJavaScript;
+
+    protected override void OnInitialized()
+    {
+        mioInteropJavaScript = new(jsRuntime);
+    }
+
 
     private void IncrementCount()
     {
         currentCount++;
     }
+
+    private async Task EseguiJavaScript()
+    {
+        if (mioInteropJavaScript == null)
+        {
+            mioInteropJavaScript = new(jsRuntime);
+        }
+        somma = await mioInteropJavaScript.SommaDaJavaScript(10, 20);
+        await mioInteropJavaScript.MiaMoltiplicazione(10,20);
+    }
+
 }
