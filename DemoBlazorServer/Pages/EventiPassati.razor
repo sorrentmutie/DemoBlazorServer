@@ -1,37 +1,98 @@
 ﻿@page "/eventipassati"
+@inject IEventi servizioEventi
+@inject IJSRuntime jsRuntime
 
-@* @inject IEnumerable<IEventi> servizioEventi
- *@
+@if(dettaglioEvento is null){
+    <button class="btn btn-info" @onclick="AggiungiEvento">Aggiungi Evento</button>
+    <ListaEventi Titolo="Lista Eventi Passati" Eventi="eventiPassati"
+    OnEventoModificato="ModificaEvento"
+    OnEventoEliminato="EliminaEventoPassato" />
+} 
 
- @inject IEventi servizioEventi
+<MyModal Id="myId" Title="Gestisci Evento" OnSave="SalvaModale" OnClose="ChiudiModale">
+    <ChildContent>
+        @if(dettaglioEvento is not null){
+            <DettaglioGenerico T="Evento" Dettaglio="dettaglioEvento" OnSalva="Salva" OnAnnulla="Annulla">
+                <FormElements>
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <InputText @bind-Value="dettaglioEvento.Nome" id="nome" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => dettaglioEvento.Nome)" />
+                    </div>
 
-<ListaEventi Titolo="Lista Eventi Passati" Eventi="eventiPassati" OnEventoEliminato="EliminaEventoPassato" />
-
+                    <div class="form-group">
+                        <label for="localita">Località</label>
+                        <InputText @bind-Value="dettaglioEvento.Località" id="localita" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => dettaglioEvento.Località)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data</label>
+                        <InputDate @bind-Value="dettaglioEvento.Data" id="data" class="form-control"></InputDate>
+                    </div>
+                </FormElements>
+            </DettaglioGenerico>
+        }
+    </ChildContent> 
+</MyModal>
 
 @code {
-    // private List<Evento> eventiPassati = new() {
-    //  new Evento { Id = 1, Nome = "Evento 3", Data = DateTime.Now.AddDays(-11), Località = "Milano" },
-    //  new Evento { Id = 2, Nome = "Evento 4", Data = DateTime.Now.AddDays(-2), Località = "Torino" },
-    // };
 
-    //ServizioEventi servizioEventi = new ServizioEventi();
     private List<Evento> eventiPassati = new();
+    private Evento? dettaglioEvento;
+
+
+    private void SalvaModale()
+    {
+        jsRuntime.InvokeVoidAsync("hideModal");
+        dettaglioEvento = null;
+    }
+
+    private void ChiudiModale()
+    {
+        jsRuntime.InvokeVoidAsync("hideModal");
+        dettaglioEvento = null;
+    }
+
+
+    private async Task Annulla(Evento eventoAnnullato)
+    {
+        dettaglioEvento = null;
+        await jsRuntime.InvokeVoidAsync("hideModal");
+    }
+
+    private async Task Salva(Evento eventoDaSalvare)
+    {
+        if(eventoDaSalvare.Id == 0)
+        {
+            servizioEventi.AggiungiEvento(eventoDaSalvare);
+            eventiPassati = servizioEventi.EstraiEventiPassati();
+        } else {
+            servizioEventi.ModificaEvento(eventoDaSalvare);
+            eventiPassati = servizioEventi.EstraiEventiPassati();
+        }
+        await jsRuntime.InvokeVoidAsync("hideModal");
+        dettaglioEvento = null;
+    }
+
+
 
     protected override void OnInitialized()
     {
         eventiPassati = servizioEventi.EstraiEventiPassati();
     }
 
-    // protected override void OnAfterRender(bool firstRender)
-    // {
+    protected async Task AggiungiEvento()
+    {
+        dettaglioEvento = new Evento() {  Data = DateTime.Today};
+        await jsRuntime.InvokeVoidAsync("showModal", "myId");
+    }
 
-    // }
 
-    // protected override void OnParametersSet()
-    // {
-        
-    // }
-
+    private async Task ModificaEvento(Evento eventoDaModificare)
+    {
+        dettaglioEvento = eventoDaModificare;
+        await jsRuntime.InvokeVoidAsync("showModal", "myId");
+    }
 
     private void EliminaEventoPassato(Evento eventoDaEliminare)
     {

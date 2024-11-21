@@ -1,0 +1,29 @@
+﻿@typeparam T where T : new()
+
+
+<h3>Dettaglio Evento</h3>
+<EditForm Model="Dettaglio" OnValidSubmit="() => OnSalva.InvokeAsync(Dettaglio)">
+
+    <DataAnnotationsValidator/>
+
+    @FormElements
+
+    <button class="btn btn-success" type="submit">Salva</button>
+    <button class="btn btn-danger" @onclick="() => OnAnnulla.InvokeAsync(Dettaglio) " type="button">Annulla</button>
+
+</EditForm>
+
+
+
+@code {
+    [Parameter] public T Dettaglio { get; set; } = new();
+    [Parameter] public EventCallback<T> OnAnnulla { get; set; }
+    [Parameter] public EventCallback<T> OnSalva { get; set; }
+    [Parameter] public RenderFragment? FormElements { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+    }
+
+}

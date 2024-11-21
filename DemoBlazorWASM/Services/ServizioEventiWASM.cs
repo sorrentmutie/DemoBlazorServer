@@ -26,4 +26,13 @@ public class ServizioEventiWASM : IEventi
         throw new NotImplementedException();
     }
 
+    public void AggiungiEvento(Evento evento)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ModificaEvento(Evento evento)
+    {
+        throw new NotImplementedException();
+    }
 }

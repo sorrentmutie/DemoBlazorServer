@@ -1,0 +1,37 @@
+﻿<h3>Dettaglio Evento</h3>
+<EditForm Model="Dettaglio" OnValidSubmit="() => OnSalva.InvokeAsync(Dettaglio)">
+
+
+    <div class="form-group">
+        <label for="nome">Nome</label>
+        <InputText @bind-Value="Dettaglio.Nome" id="nome" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="localita">Località</label>
+        <InputText @bind-Value="Dettaglio.Località" id="localita" class="form-control"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="data">Data</label>
+        <InputDate @bind-Value="Dettaglio.Data" id="data" class="form-control"></InputDate>
+    </div>
+
+    <button class="btn btn-success" type="submit">Salva</button>
+    <button class="btn btn-danger" @onclick="() => OnAnnulla.InvokeAsync(Dettaglio) " type="button">Annulla</button>
+
+</EditForm>
+
+
+
+@code {
+    [Parameter] public Evento Dettaglio { get; set; } = new();
+    [Parameter] public EventCallback<Evento> OnAnnulla { get; set; }
+    [Parameter] public EventCallback<Evento> OnSalva { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+    }
+
+}   
