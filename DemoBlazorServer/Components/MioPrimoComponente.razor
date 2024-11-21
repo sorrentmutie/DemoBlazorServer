@@ -2,6 +2,22 @@
 <p>@currentCount</p>
 <MioSecondoComponente />
 
+@FirstChild
+
+<hr/>
+
+@SecondChild
+
+
 @code {
     private int currentCount = 12;
+
+    [Parameter]
+    public RenderFragment? FirstChild { get; set; }
+
+    [Parameter]
+    public RenderFragment? SecondChild { get; set; }
+
+
+
 }
