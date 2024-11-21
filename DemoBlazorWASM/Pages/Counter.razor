@@ -16,9 +16,11 @@
 @somma
 
 <hr/>
-<MyModal Id="@myId"></MyModal>
-
-
+<MyModal Id="@myId" Title="Mia modale bellissima" OnSave="SalvaDatiModale">
+    <ChildContent>
+        <p>Contenuto della modale</p>
+    </ChildContent>
+</MyModal>
 
 
 @code {
@@ -32,6 +34,10 @@
         mioInteropJavaScript = new(jsRuntime);
         await jsRuntime.InvokeVoidAsync("miaFunzioneSpeciale", 3,4);
         await mioInteropJavaScript.SalutaDaJavaScript("Mario");
+    }
+
+    private async Task SalvaDatiModale(){
+        await jsRuntime.InvokeVoidAsync("hideModal");
     }
 
     private async Task ApriModale() { 
