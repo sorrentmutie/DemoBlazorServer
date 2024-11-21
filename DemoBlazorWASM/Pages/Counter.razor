@@ -14,14 +14,18 @@
 @somma
 
 
+
+
+
 @code {
     private int currentCount = 0;
     private int somma = 0;
     private MioInteropJavaScript? mioInteropJavaScript;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         mioInteropJavaScript = new(jsRuntime);
+        await jsRuntime.InvokeVoidAsync("miaFunzioneSpeciale", 3,4);
     }
 
 
@@ -38,6 +42,12 @@
         }
         somma = await mioInteropJavaScript.SommaDaJavaScript(10, 20);
         await mioInteropJavaScript.MiaMoltiplicazione(10,20);
+    }
+
+    [JSInvokable]
+    public static async Task<int> CalcolaSommaSpeciale(int a, int b) {
+        await Task.Delay(2000);
+        return (a + b + 100);
     }
 
 }
